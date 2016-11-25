@@ -210,7 +210,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, $q, tags
                 tiUtil.handleUndefinedResult($scope.onTagAdding, true),
                 tiUtil.handleUndefinedResult($scope.onTagRemoving, true));
 
-            this.registerAutocomplete = function() {
+            this.registerAutocomplete = function(autocompleteScope) {
+                $scope.autocompleteScope = autocompleteScope;
+
                 var input = $element.find('input');
 
                 return {
@@ -232,6 +234,16 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, $q, tags
                     on: function(name, handler) {
                         $scope.events.on(name, handler, true);
                         return this;
+                    }
+                };
+            };
+
+            this.registerAutocompleteTrigger = function() {
+                $scope.hasAutocompleteTrigger = true;
+
+                return {
+                    loadSuggestions: function() {
+                        return $scope.autocompleteScope.loadSuggestions();
                     }
                 };
             };
